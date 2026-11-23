@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -116,48 +117,6 @@
       justify-content: center;
     }
     .peer-info b { color: #bbf7d0; }
-
-    /* ---- Tabs ---- */
-    .tabs {
-      display: flex;
-      background: rgba(15, 23, 42, 0.5);
-      border-bottom: 1px solid rgba(148, 163, 184, 0.12);
-    }
-    .tab {
-      flex: 1;
-      padding: 0.7rem 0.2rem;
-      text-align: center;
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: #94a3b8;
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      transition: color 0.2s, border-color 0.2s, background 0.2s;
-      user-select: none;
-      position: relative;
-    }
-    .tab.active {
-      color: #93c5fd;
-      border-bottom-color: #60a5fa;
-      background: rgba(96, 165, 250, 0.08);
-    }
-    .tab .badge-dot {
-      display: inline-block;
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: #22c55e;
-      margin-left: 0.3rem;
-      animation: pulse 1.6s infinite;
-      vertical-align: middle;
-      position: absolute;
-      top: 0.4rem;
-      right: 0.4rem;
-    }
-    @keyframes pulse {
-      0%   { box-shadow: 0 0 0 0 currentColor; opacity: 1; }
-      70%  { box-shadow: 0 0 0 6px transparent; opacity: 0.9; }
-      100% { box-shadow: 0 0 0 0 transparent; opacity: 1; }
-    }
 
     /* ---- Panels ---- */
     .panel { display: none; flex-direction: column; flex: 1; overflow: hidden; }
@@ -331,79 +290,6 @@
     }
     .game-chat-input-row button:active { transform: scale(0.94); }
     .game-chat-input-row button:disabled { opacity: 0.4; cursor: not-allowed; }
-
-    /* ---- Call panel (Start / Skip) ---- */
-    .call-panel {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem;
-      gap: 1rem;
-      text-align: center;
-    }
-    .call-avatar {
-      width: 90px; height: 90px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.5rem;
-      box-shadow: 0 10px 30px -8px rgba(99, 102, 241, 0.5);
-      animation: pulse 2s infinite;
-      overflow: hidden;
-    }
-    .call-avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .call-number {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #e2e8f0;
-      font-family: 'SF Mono', ui-monospace, monospace;
-    }
-    .call-name { font-size: 1rem; color: #93c5fd; font-weight: 600; }
-    .call-state {
-      font-size: 0.85rem;
-      color: #94a3b8;
-    }
-    .call-actions {
-      display: flex;
-      gap: 1rem;
-      margin-top: 0.5rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .call-btn {
-      width: 60px; height: 60px;
-      border-radius: 50%;
-      border: none;
-      font-size: 1.4rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.15s, box-shadow 0.2s;
-      box-shadow: 0 8px 20px -6px rgba(0,0,0,0.5);
-    }
-    .call-btn:active { transform: scale(0.94); }
-    .call-btn.accept {
-      background: linear-gradient(135deg, #22c55e, #16a34a);
-      color: white;
-    }
-    .call-btn.reject {
-      background: linear-gradient(135deg, #ef4444, #dc2626);
-      color: white;
-    }
-    .call-btn.hangup {
-      background: linear-gradient(135deg, #ef4444, #dc2626);
-      color: white;
-    }
-    .call-btn.mute {
-      background: rgba(148, 163, 184, 0.2);
-      color: #cbd5e1;
-      border: 1px solid rgba(148, 163, 184, 0.3);
-    }
 
     /* Idle / Start panel */
     .idle-panel {
@@ -628,7 +514,6 @@
 
     @media (max-width: 500px) {
       .app { max-width: 100%; border-radius: 1.2rem; }
-      .tab { font-size: 0.72rem; padding: 0.65rem 0.1rem; }
       .header-info { max-width: 100px; }
       .board { max-width: 280px; gap: 7px; }
       .cell { font-size: 2rem; border-radius: 0.8rem; }
@@ -667,10 +552,6 @@
     </div>
   </div>
 
-  <div class="tabs">
-    <div class="tab active" data-tab="game">🎮 X-O + Chat</div>
-  </div>
-
   <!-- ===== SINGLE GAME PANEL ===== -->
   <div class="panel active" id="panel-game">
 
@@ -679,18 +560,17 @@
       <div class="idle-icon">🎮</div>
       <div class="idle-title">X-O Battle</div>
       <div class="idle-desc">
-        Press Start to be matched with a random available player.<br>
-        You'll play X-O and chat in real time.
+        Press Start to join the Lobby.<br>
+        You will connect instantly with the next available player.
       </div>
       <button class="start-btn" id="startBtn">▶ Start</button>
-      <button class="skip-btn" id="skipBtn" style="display:none;">⏭ Skip to next player</button>
     </div>
 
     <!-- SEARCHING screen -->
     <div class="idle-panel hidden" id="searchingPanel">
       <div class="idle-icon" style="animation:spin 1.2s linear infinite;">🔄</div>
-      <div class="idle-title">Searching for a player…</div>
-      <div class="idle-desc">Looking for an available opponent. This may take a moment.</div>
+      <div class="idle-title">Waiting in Lobby…</div>
+      <div class="idle-desc">Waiting for another player to press Start. Keep this open.</div>
       <button class="skip-btn" id="cancelSearchBtn">✕ Cancel</button>
     </div>
 
@@ -737,19 +617,14 @@
 (() => {
   'use strict';
 
-  // ================================================================
   // DOM
-  // ================================================================
   const myNumberEl   = document.getElementById('myNumberEl');
   const myNumberText = document.getElementById('myNumberText');
   const myNameEl     = document.getElementById('myName');
   const myAvatarEl   = document.getElementById('myAvatar');
   const headerLeft   = document.getElementById('headerLeft');
   const peerInfo     = document.getElementById('peerInfo');
-  const tabs         = document.querySelectorAll('.tab');
-  const panels       = document.querySelectorAll('.panel');
 
-  // Profile modal
   const profileOverlay      = document.getElementById('profileOverlay');
   const profileTitle        = document.getElementById('profileTitle');
   const profilePreview      = document.getElementById('profilePreview');
@@ -758,16 +633,13 @@
   const profileSaveBtn      = document.getElementById('profileSaveBtn');
   const profileCancelBtn    = document.getElementById('profileCancelBtn');
 
-  // Screens
   const idlePanel        = document.getElementById('idlePanel');
   const searchingPanel   = document.getElementById('searchingPanel');
   const gameActivePanel  = document.getElementById('gameActivePanel');
   const startBtn         = document.getElementById('startBtn');
-  const skipBtn          = document.getElementById('skipBtn');
   const cancelSearchBtn  = document.getElementById('cancelSearchBtn');
   const skipGameBtn      = document.getElementById('skipGameBtn');
 
-  // Game
   const boardEl       = document.getElementById('board');
   const gameStatusEl  = document.getElementById('gameStatus');
   const resetGameBtn  = document.getElementById('resetGameBtn');
@@ -775,21 +647,18 @@
   const turnLabel     = document.getElementById('turnLabel');
   const scoreLabel    = document.getElementById('scoreLabel');
 
-  // Game chat
   const gameChatMessages = document.getElementById('gameChatMessages');
   const gameChatInput    = document.getElementById('gameChatInput');
   const gameSendBtn      = document.getElementById('gameSendBtn');
 
-  // Status
   const dot        = document.getElementById('dot');
   const statusText = document.getElementById('statusText');
   const toastEl    = document.getElementById('toast');
 
-  // ================================================================
   // STATE
-  // ================================================================
   let peer = null;
   let dataConn = null;
+  let lobbyConn = null;
   let myNumber = null;
   let peerNumber = null;
   let peerProfile = null;
@@ -798,9 +667,7 @@
   let iAmInitiator = false;
   let isSearching = false;
   let isConnected = false;
-  let skipAfterConnect = false; // if true, disconnect then auto-search
 
-  // Game
   let board = Array(9).fill(null);
   let currentPlayer = 'X';
   let gameActive = true;
@@ -811,9 +678,7 @@
   let myScore = 0;
   let peerScore = 0;
 
-  // Timers
-  let searchTimeout = null;
-  let heartbeatInterval = null;
+  const LOBBY_ID = 'xo-lobby-v1-instant-match';
 
   const ICE_SERVERS = [
     { urls: 'stun:stun.l.google.com:19302' },
@@ -823,9 +688,7 @@
     { urls: 'turn:openrelay.metered.ca:443?transport=tcp', username: 'openrelayproject', credential: 'openrelayproject' }
   ];
 
-  // ================================================================
   // UTILS
-  // ================================================================
   const setStatus = (text, cls = '') => {
     statusText.textContent = text;
     dot.className = 'dot ' + cls;
@@ -839,20 +702,12 @@
   };
 
   const escapeHtml = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-
   const getInitials = (name) => {
     if (!name) return '?';
     return name.trim().split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase();
   };
 
-  const formatTime = (ts) => {
-    const d = ts ? new Date(ts) : new Date();
-    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  };
-
-  // ================================================================
   // PROFILE
-  // ================================================================
   const loadProfile = () => {
     try {
       const saved = localStorage.getItem('p2p_profile');
@@ -890,11 +745,9 @@
   };
 
   const closeProfileModal = () => profileOverlay.classList.remove('active');
-
   let pendingAvatar = undefined;
 
   profilePreview.addEventListener('click', () => profilePictureInput.click());
-
   profilePictureInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -910,9 +763,7 @@
   profileSaveBtn.addEventListener('click', () => {
     const name = profileNameInput.value.trim() || 'Anonymous';
     myProfile.name = name;
-    if (pendingAvatar !== undefined) {
-      myProfile.avatar = pendingAvatar;
-    }
+    if (pendingAvatar !== undefined) myProfile.avatar = pendingAvatar;
     pendingAvatar = undefined;
     saveProfile();
     renderMyProfile();
@@ -926,9 +777,7 @@
   profileCancelBtn.addEventListener('click', closeProfileModal);
   headerLeft.addEventListener('click', () => openProfileModal(false));
 
-  // ================================================================
-  // PEERJS — Room-based auto-matchmaking
-  // ================================================================
+  // INIT PEER
   const initPeer = (id) => {
     if (peer) { try { peer.destroy(); } catch(e){} peer = null; }
     peer = new Peer(id, {
@@ -937,48 +786,37 @@
     });
 
     peer.on('open', (openId) => {
-      setStatus('Online · waiting', 'connected');
+      setStatus('Online · Ready', 'connected');
       myNumber = openId;
       myNumberText.textContent = openId;
     });
 
     peer.on('connection', (conn) => {
-      // If we're already connected or searching, reject this incoming connection
-      if (isConnected || (dataConn && dataConn.open)) {
+      if (isConnected) {
         try { conn.close(); } catch(e){}
         return;
       }
-      // Accept incoming connection — we are the receiver (O)
       peerNumber = conn.peer.replace('xo-', '');
       iAmInitiator = false;
       setupDataConn(conn, false);
     });
 
     peer.on('error', (err) => {
-      console.warn('Peer error:', err.type, err);
+      console.warn('Peer error:', err.type);
       if (err.type === 'unavailable-id') {
-        // regenerate ID and re-init
         const newNum = generateNumber();
         localStorage.setItem('xo_my_number', newNum);
         initPeer('xo-' + newNum);
-      } else if (err.type === 'peer-unavailable') {
-        // target busy or gone — silently try next
-        if (isSearching) {
-          // continue searching
-        }
       } else if (err.type === 'network' || err.type === 'server-error' || err.type === 'socket-error') {
         setStatus('Network issue…', 'connecting');
       }
     });
   };
 
-  const generateNumber = () => String(Math.floor(1000 + Math.random() * 9000));
+  const generateNumber = () => String(Math.floor(10000 + Math.random() * 90000));
 
-  // ================================================================
-  // DATA CONNECTION
-  // ================================================================
+  // DATA CONNECTION (Between Players)
   const setupDataConn = (conn, initiator) => {
-    // Close any existing connection first
     if (dataConn && dataConn !== conn) {
       try { dataConn.close(); } catch(e){}
     }
@@ -986,7 +824,6 @@
     iAmInitiator = initiator;
     isConnected = false;
 
-    // Assign symbols: initiator = X, receiver = O
     if (initiator) {
       mySymbol = 'X';
       peerSymbol = 'O';
@@ -999,33 +836,22 @@
     conn.on('open', () => {
       isConnected = true;
       isSearching = false;
-      clearTimeout(searchTimeout);
+      
+      // Leave the lobby since we found a match
+      if (lobbyConn && lobbyConn.open) {
+        try { lobbyConn.close(); } catch(e){}
+        lobbyConn = null;
+      }
+
       setStatus('🟢 In game', 'connected');
       peerInfo.classList.add('visible');
 
-      // Show game screen
       showGameScreen();
-
-      // Send my profile
-      sendData({
-        type: 'profile',
-        name: myProfile.name,
-        avatar: myProfile.avatar
-      });
-
-      // Reset game
+      sendData({ type: 'profile', name: myProfile.name, avatar: myProfile.avatar });
       resetGameState();
       addGameChatMessage(`🟢 Connected! You are ${mySymbol}. ${currentPlayer} starts.`, 'system');
       showToast('🟢 Player found!');
-
-      // Update peer info placeholder
       updatePeerInfo();
-
-      // If skip was requested during connection, immediately disconnect and search again
-      if (skipAfterConnect) {
-        skipAfterConnect = false;
-        setTimeout(() => skipPlayer(), 200);
-      }
     });
 
     conn.on('data', handleIncomingData);
@@ -1036,9 +862,7 @@
       }
     });
 
-    conn.on('error', (err) => {
-      console.warn('DataConn error', err);
-    });
+    conn.on('error', (err) => console.warn('DataConn error', err));
   };
 
   const sendData = (obj) => {
@@ -1049,9 +873,7 @@
     return false;
   };
 
-  // ================================================================
   // INCOMING DATA
-  // ================================================================
   const handleIncomingData = (raw) => {
     let msg;
     try { msg = JSON.parse(raw); } catch (e) { return; }
@@ -1061,17 +883,14 @@
         peerProfile = { name: msg.name, avatar: msg.avatar };
         updatePeerInfo();
         break;
-
       case 'chat':
         addGameChatMessage(msg.text, false);
         break;
-
       case 'move':
         if (msg.symbol === peerSymbol && gameActive && !gameWinner && !board[msg.index]) {
           makeMove(msg.index, msg.symbol);
         }
         break;
-
       case 'reset':
         board = Array(9).fill(null);
         currentPlayer = 'X';
@@ -1081,16 +900,6 @@
         renderBoard();
         addGameChatMessage(`🔄 Peer started round ${round}.`, 'system');
         break;
-
-      case 'busy':
-        // Peer is busy — try next
-        if (isSearching) {
-          try { dataConn.close(); } catch(e){}
-          dataConn = null;
-          // continue searching automatically
-        }
-        break;
-
       case 'bye':
         addGameChatMessage('👋 Peer left the game.', 'system');
         break;
@@ -1116,9 +925,6 @@
     peerInfo.classList.add('visible');
   };
 
-  // ================================================================
-  // DISCONNECT HANDLING
-  // ================================================================
   const onPeerDisconnected = () => {
     const wasConnected = isConnected;
     isConnected = false;
@@ -1132,282 +938,70 @@
       showToast('Peer disconnected');
     }
 
-    // Return to idle (or auto-search if skipAfterConnect is set)
-    if (skipAfterConnect) {
-      skipAfterConnect = false;
-      showSearchingScreen();
-      startSearching();
-    } else {
-      showIdleScreen();
-      setStatus('Idle', '');
-    }
+    showIdleScreen();
+    setStatus('Idle', '');
   };
 
   // ================================================================
-  // MATCHMAKING — random available player
+  // LOBBY MATCHMAKING (The Fix)
   // ================================================================
-  // We use a shared "lobby" Peer ID that everyone tries to claim.
-  // Strategy: each user has their own peer ID (xo-<random>).
-  // To find a random opponent, we use a dedicated "lobby" peer that
-  // broadcasts available users. But simpler: we use PeerJS with a
-  // known "matchmaker" approach:
-  //
-  // 1. Every user registers a "presence" by connecting to a shared
-  //    lobby peer (xo-lobby). The lobby peer collects connected users.
-  // 2. When a user presses Start, they ask the lobby for a random
-  //    available peer ID (not already in a game).
-  // 3. Then they connect directly to that peer.
-  //
-  // This requires a stable lobby peer. Since we can't run a server,
-  // we use a well-known PeerJS ID as the lobby: "xo-lobby-master".
-  // The first user to connect becomes the lobby master (host).
-  // If the master disconnects, another user takes over.
-  //
-  // However, for simplicity and reliability with PeerJS free servers,
-  // we'll implement a lighter approach:
-  //
-  // ALTERNATIVE: Each user tries random IDs in a range until finding
-  // a peer that is online AND not in a game. To know if a peer is
-  // "in a game", the peer answers a "ping" with status "available"
-  // or "busy". We scan a pool of possible IDs (e.g. 1000-9999).
-  //
-  // This is inefficient but works for small numbers of users.
-  //
-  // BETTER: We use a shared "rendezvous" peer ID per time-slot.
-  // Users connect to a rendezvous peer and register. The rendezvous
-  // peer pairs them up.
-  //
-  // For this implementation, we'll use the rendezvous approach with
-  // a well-known ID: "xo-rendezvous". If that peer doesn't exist,
-  // the user becomes the rendezvous (host). The host maintains a
-  // list of available users and pairs them.
-  //
-  // To avoid complexity with host migration, we'll implement a
-  // simpler "scan" approach that works reliably for the demo:
-  //
-  // Each user generates a random 4-digit ID. When searching, they
-  // scan random IDs by attempting peer.connect(). If the target
-  // is online and accepts, it responds with "available" or "busy".
-  // If available, the connection is kept and the game starts.
-  // If busy, the connection is closed and scanning continues.
-  //
-  // The target only accepts a connection if it is currently idle
-  // (not in a game and not searching). This naturally prevents
-  // double-booking.
-  //
-  // This is what we'll implement. It's simple and works.
-
+  
   const startSearching = () => {
     if (isSearching) return;
     if (isConnected) return;
     isSearching = true;
-    setStatus('🔍 Searching…', 'searching');
+    setStatus('🔍 Waiting in Lobby…', 'searching');
     showSearchingScreen();
 
-    // Start scanning random IDs
-    scanForPlayer();
-  };
+    // Connect to the central lobby
+    lobbyConn = peer.connect(LOBBY_ID, { reliable: true });
 
-  const scanForPlayer = () => {
-    if (!isSearching || isConnected || !peer || peer.destroyed) return;
-
-    // Generate a random target ID (1000-9999), prefixed
-    const targetNum = String(Math.floor(1000 + Math.random() * 9000));
-    const targetId = 'xo-' + targetNum;
-
-    // Don't try to connect to ourselves
-    if (targetId === peer.id) {
-      setTimeout(scanForPlayer, 100);
-      return;
-    }
-
-    let conn;
-    try {
-      conn = peer.connect(targetId, { reliable: true });
-    } catch (e) {
-      setTimeout(scanForPlayer, 300);
-      return;
-    }
-
-    // Set a short timeout: if no response, move on
-    let responded = false;
-    const timeout = setTimeout(() => {
-      if (!responded && conn) {
-        responded = true;
-        try { conn.close(); } catch(e){}
-        if (isSearching && !isConnected) {
-          setTimeout(scanForPlayer, 150);
-        }
-      }
-    }, 2500);
-
-    conn.on('open', () => {
-      if (responded) { try { conn.close(); } catch(e){} return; }
-      responded = true;
-      clearTimeout(timeout);
-
-      // Send a "hello" to check if they're available
-      try {
-        conn.send(JSON.stringify({ type: 'hello', from: peer.id }));
-      } catch (e) {
-        try { conn.close(); } catch(e2){}
-        if (isSearching && !isConnected) setTimeout(scanForPlayer, 150);
-        return;
-      }
-
-      // Wait for a response
-      const responseTimeout = setTimeout(() => {
-        try { conn.close(); } catch(e){}
-        if (isSearching && !isConnected) setTimeout(scanForPlayer, 150);
-      }, 1500);
-
-      const onHelloResponse = (raw) => {
-        let msg;
-        try { msg = JSON.parse(raw); } catch (e) { return; }
-        if (msg.type === 'hello-response') {
-          clearTimeout(responseTimeout);
-          conn.off('data', onHelloResponse);
-
-          if (msg.available) {
-            // Target is available — take over this connection!
-            isSearching = false;
-            clearTimeout(searchTimeout);
-            peerNumber = targetNum;
-            iAmInitiator = true;
-            setupDataConn(conn, true);
-          } else {
-            // Target is busy — close and continue
-            try { conn.close(); } catch(e){}
-            if (isSearching && !isConnected) setTimeout(scanForPlayer, 150);
-          }
-        }
-      };
-
-      conn.on('data', onHelloResponse);
+    lobbyConn.on('open', () => {
+      // Tell the lobby we are ready to play
+      lobbyConn.send(JSON.stringify({
+        type: 'join-lobby',
+        peerId: peer.id,
+        name: myProfile.name
+      }));
     });
 
-    conn.on('error', () => {
-      if (!responded) {
-        responded = true;
-        clearTimeout(timeout);
-        if (isSearching && !isConnected) setTimeout(scanForPlayer, 150);
+    lobbyConn.on('data', (raw) => {
+      let msg;
+      try { msg = JSON.parse(raw); } catch (e) { return; }
+
+      if (msg.type === 'matched') {
+        // The lobby found us a match! Connect directly to the opponent.
+        isSearching = false;
+        peerNumber = msg.opponentId.replace('xo-', '');
+        iAmInitiator = true; // We connect, so we are X
+        
+        // Close lobby connection, we don't need it anymore
+        try { lobbyConn.close(); } catch(e){}
+        lobbyConn = null;
+
+        // Setup direct game connection
+        const conn = peer.connect(msg.opponentId, { reliable: true });
+        setupDataConn(conn, true);
       }
     });
 
-    conn.on('close', () => {
-      if (!responded) {
-        responded = true;
-        clearTimeout(timeout);
-        if (isSearching && !isConnected) setTimeout(scanForPlayer, 150);
+    lobbyConn.on('error', () => {
+      if (isSearching) {
+        showToast('Lobby error. Retrying...');
+        setTimeout(startSearching, 2000);
       }
     });
   };
 
-  // Handle incoming "hello" on an idle peer
-  // We need to listen for connections even when idle.
-  // The peer.on('connection') handler above already accepts incoming
-  // connections. But for the "hello" protocol, the incoming connection
-  // is handled by setupDataConn which assumes it's a game connection.
-  // We need a separate handler for "probe" connections.
-  //
-  // Solution: In peer.on('connection'), we check if we're idle and
-  // the incoming connection sends a "hello". If so, respond with
-  // available status, then either accept (if available) or close.
-  //
-  // Let's modify the peer.on('connection') handler to support this.
-
-  // We'll re-define the connection handler after initPeer.
-  // Actually, let's integrate it into initPeer's connection handler.
-
-  // ----------------------------------------------------------------
-  // The following is the actual connection handler used by PeerJS.
-  // We override the one set in initPeer by re-assigning peer.on.
-  // But since initPeer is called once, we need to include the probe
-  // logic there. Let's patch initPeer to use a smarter handler.
-  // ----------------------------------------------------------------
-
-  // We'll redefine initPeer with probe support.
-  const initPeerWithProbe = (id) => {
-    if (peer) { try { peer.destroy(); } catch(e){} peer = null; }
-    peer = new Peer(id, {
-      debug: 0,
-      config: { iceServers: ICE_SERVERS }
-    });
-
-    peer.on('open', (openId) => {
-      setStatus('Online · waiting', 'connected');
-      myNumber = openId;
-      myNumberText.textContent = openId;
-    });
-
-    peer.on('connection', (conn) => {
-      // First, listen for a potential "hello" probe
-      let isProbe = true;
-      let probeHandled = false;
-
-      const probeTimeout = setTimeout(() => {
-        if (isProbe && !probeHandled) {
-          // No hello received — this is a direct game connection
-          isProbe = false;
-          handleDirectConnection(conn);
-        }
-      }, 800);
-
-      const onProbeData = (raw) => {
-        let msg;
-        try { msg = JSON.parse(raw); } catch (e) { return; }
-        if (msg.type === 'hello' && isProbe) {
-          isProbe = false;
-          probeHandled = true;
-          clearTimeout(probeTimeout);
-          conn.off('data', onProbeData);
-
-          // Determine if we're available (idle and not connected)
-          const available = !isConnected && !dataConn && !isSearching;
-
-          try {
-            conn.send(JSON.stringify({ type: 'hello-response', available }));
-          } catch (e) {}
-
-          if (!available) {
-            // We're busy — close this probe connection
-            setTimeout(() => { try { conn.close(); } catch(e){} }, 100);
-            return;
-          }
-
-          // We're available — accept this connection as a game connection!
-          // The other side will set up the data connection on their end
-          // (they are the initiator). We are the receiver.
-          peerNumber = conn.peer.replace('xo-', '');
-          iAmInitiator = false;
-          setupDataConn(conn, false);
-        }
-      };
-
-      conn.on('data', onProbeData);
-    });
-
-    peer.on('error', (err) => {
-      console.warn('Peer error:', err.type);
-      if (err.type === 'unavailable-id') {
-        const newNum = generateNumber();
-        localStorage.setItem('xo_my_number', newNum);
-        initPeerWithProbe('xo-' + newNum);
-      } else if (err.type === 'network' || err.type === 'server-error' || err.type === 'socket-error') {
-        setStatus('Network issue…', 'connecting');
-      }
-    });
-  };
-
-  // Handle a direct connection (no hello) — treat as game connection
-  const handleDirectConnection = (conn) => {
-    if (isConnected || (dataConn && dataConn.open)) {
-      try { conn.close(); } catch(e){}
-      return;
+  const cancelSearch = () => {
+    isSearching = false;
+    if (lobbyConn && lobbyConn.open) {
+      try { lobbyConn.send(JSON.stringify({ type: 'leave-lobby', peerId: peer.id })); } catch(e){}
+      try { lobbyConn.close(); } catch(e){}
+      lobbyConn = null;
     }
-    peerNumber = conn.peer.replace('xo-', '');
-    iAmInitiator = false;
-    setupDataConn(conn, false);
+    showIdleScreen();
+    setStatus('Idle', '');
   };
 
   // ================================================================
@@ -1417,25 +1011,22 @@
     idlePanel.classList.remove('hidden');
     searchingPanel.classList.add('hidden');
     gameActivePanel.classList.add('hidden');
-    skipBtn.style.display = 'none';
   };
 
   const showSearchingScreen = () => {
     idlePanel.classList.add('hidden');
     searchingPanel.classList.remove('hidden');
     gameActivePanel.classList.add('hidden');
-    skipBtn.style.display = 'none';
   };
 
   const showGameScreen = () => {
     idlePanel.classList.add('hidden');
     searchingPanel.classList.add('hidden');
     gameActivePanel.classList.remove('hidden');
-    skipBtn.style.display = 'none';
   };
 
   // ================================================================
-  // GAME
+  // GAME LOGIC
   // ================================================================
   const resetGameState = () => {
     board = Array(9).fill(null);
@@ -1463,9 +1054,7 @@
     });
 
     if (gameWinner) {
-      gameStatusEl.textContent = gameWinner === 'draw'
-        ? `🤝 Round ${round} draw!`
-        : `🏆 ${gameWinner} wins round ${round}!`;
+      gameStatusEl.textContent = gameWinner === 'draw' ? `🤝 Round ${round} draw!` : `🏆 ${gameWinner} wins round ${round}!`;
     } else {
       gameStatusEl.textContent = `${currentPlayer === mySymbol ? 'Your' : "Peer's"} turn (${currentPlayer})`;
     }
@@ -1476,11 +1065,7 @@
   }
 
   function checkWinner(b) {
-    const lines = [
-      [0,1,2],[3,4,5],[6,7,8],
-      [0,3,6],[1,4,7],[2,5,8],
-      [0,4,8],[2,4,6]
-    ];
+    const lines = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
     for (const [a,b2,c] of lines) {
       if (b[a] && b[a] === b[b2] && b[a] === b[c]) return b[a];
     }
@@ -1525,9 +1110,7 @@
     addGameChatMessage(`🔄 Round ${round} started.`, 'system');
   });
 
-  // ================================================================
   // GAME CHAT
-  // ================================================================
   const addGameChatMessage = (text, type = 'peer') => {
     const div = document.createElement('div');
     div.className = 'game-chat-msg' + (type === 'self' ? ' self' : type === 'system' ? ' system' : '');
@@ -1548,22 +1131,8 @@
   gameSendBtn.addEventListener('click', sendGameChat);
   gameChatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendGameChat(); });
 
-  // ================================================================
   // SKIP
-  // ================================================================
   const skipPlayer = () => {
-    if (!isConnected && !dataConn) {
-      // If searching, just cancel
-      if (isSearching) {
-        isSearching = false;
-        clearTimeout(searchTimeout);
-        showIdleScreen();
-        setStatus('Idle', '');
-      }
-      return;
-    }
-
-    // If connected, notify peer and disconnect
     if (dataConn && dataConn.open) {
       try { sendData({ type: 'bye' }); } catch(e){}
       try { dataConn.close(); } catch(e){}
@@ -1574,101 +1143,117 @@
     isConnected = false;
     peerInfo.classList.remove('visible');
 
-    // Now start searching for a new player
     showSearchingScreen();
-    isSearching = true;
-    setStatus('🔍 Searching…', 'searching');
-    setTimeout(() => scanForPlayer(), 300);
+    setTimeout(startSearching, 300);
   };
 
-  // ================================================================
-  // BUTTON EVENTS
-  // ================================================================
+  // BUTTONS
   startBtn.addEventListener('click', () => {
     if (isConnected || isSearching) return;
-    // Ensure we have a peer
-    if (!peer || peer.destroyed) {
-      showToast('Connecting to server…');
-      return;
-    }
+    if (!peer || peer.destroyed) { showToast('Connecting to server…'); return; }
     startSearching();
   });
 
-  skipBtn.addEventListener('click', () => {
-    if (isConnected) {
-      skipPlayer();
-    } else if (isSearching) {
-      isSearching = false;
-      clearTimeout(searchTimeout);
-      showIdleScreen();
-      setStatus('Idle', '');
-    }
-  });
-
-  cancelSearchBtn.addEventListener('click', () => {
-    isSearching = false;
-    clearTimeout(searchTimeout);
-    showIdleScreen();
-    setStatus('Idle', '');
-  });
-
-  skipGameBtn.addEventListener('click', () => {
-    if (isConnected) {
-      skipPlayer();
-    }
-  });
+  cancelSearchBtn.addEventListener('click', cancelSearch);
+  skipGameBtn.addEventListener('click', skipPlayer);
 
   // ================================================================
+  // AUTOMATED LOBBY SERVER (Runs silently in the background)
+  // ================================================================
+  // One of the connected players will act as the "Lobby Master".
+  // This happens automatically without the users knowing.
+  
+  const startLobbyMaster = () => {
+    const lobbyPeer = new Peer(LOBBY_ID, { debug: 0 });
+    let waitingPlayer = null;
+
+    lobbyPeer.on('open', () => {
+      console.log('👑 Lobby Master active');
+    });
+
+    lobbyPeer.on('connection', (conn) => {
+      conn.on('data', (raw) => {
+        let msg;
+        try { msg = JSON.parse(raw); } catch (e) { return; }
+
+        if (msg.type === 'join-lobby') {
+          if (!waitingPlayer) {
+            // First player joins, hold them in queue
+            waitingPlayer = { peerId: msg.peerId, conn };
+            // Optional: send ack
+          } else {
+            // Second player joins, pair them instantly!
+            const p1 = waitingPlayer;
+            const p2 = { peerId: msg.peerId, conn };
+            
+            // Tell Player 1 to connect to Player 2
+            try { p1.conn.send(JSON.stringify({ type: 'matched', opponentId: p2.peerId })); } catch(e){}
+            // Tell Player 2 to connect to Player 1
+            try { p2.conn.send(JSON.stringify({ type: 'matched', opponentId: p1.peerId })); } catch(e){}
+            
+            waitingPlayer = null; // Clear queue
+          }
+        } 
+        else if (msg.type === 'leave-lobby') {
+          if (waitingPlayer && waitingPlayer.peerId === msg.peerId) {
+            waitingPlayer = null;
+          }
+        }
+      });
+
+      conn.on('close', () => {
+        if (waitingPlayer && waitingPlayer.conn === conn) {
+          waitingPlayer = null;
+        }
+      });
+    });
+
+    lobbyPeer.on('error', (err) => {
+      if (err.type === 'unavailable-id') {
+        // Someone else is already the master. That's perfect. We don't need to be the master.
+        try { lobbyPeer.destroy(); } catch(e){}
+      }
+    });
+  };
+
   // INIT
-  // ================================================================
   const init = async () => {
-    // Load / generate number
     let saved = localStorage.getItem('xo_my_number');
     let num;
-    if (saved && /^\d{4}$/.test(saved)) num = saved;
+    if (saved && /^\d{5}$/.test(saved)) num = saved;
     else {
       num = generateNumber();
       localStorage.setItem('xo_my_number', num);
     }
     myNumberText.textContent = num;
 
-    myNumberEl.addEventListener('click', (e) => {
-      e.stopPropagation();
-      navigator.clipboard?.writeText(myNumber || num).then(
-        () => showToast('📋 ID copied'),
-        () => showToast('Your ID: ' + (myNumber || num))
-      );
-    });
-
-    // Load profile
     loadProfile();
     renderMyProfile();
 
-    // If first time, show modal
     if (!localStorage.getItem('p2p_profile')) {
       openProfileModal(true);
     }
 
-    // Init peer with probe support
-    initPeerWithProbe('xo-' + num);
+    // Boot up the Peer and the silent Lobby server
+    initPeer('xo-' + num);
+    startLobbyMaster(); 
 
-    // Set initial screen
     showIdleScreen();
     setStatus('Connecting…', 'connecting');
 
-    // After peer is ready, set status
     const checkPeerReady = setInterval(() => {
       if (peer && peer.id && !peer.destroyed) {
         clearInterval(checkPeerReady);
-        setStatus('Online · ready', 'connected');
+        setStatus('Online · Ready', 'connected');
       }
     }, 500);
 
-    // Cleanup on unload
     window.addEventListener('beforeunload', () => {
+      if (lobbyConn && lobbyConn.open) {
+        try { lobbyConn.send(JSON.stringify({ type: 'leave-lobby', peerId: peer.id })); } catch(e){}
+      }
       if (dataConn && dataConn.open) {
         try { dataConn.send(JSON.stringify({ type: 'bye' })); } catch(e){}
-        try { dataConn.close(); } catch(e){}
       }
       if (peer) { try { peer.destroy(); } catch(e){} }
     });
