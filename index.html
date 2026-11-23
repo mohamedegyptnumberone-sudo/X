@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#0f172a">
-  <title>P2P · X-O + GAme </title>
+  <title>P2P · X-O + GAme</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     html, body { height: 100%; }
@@ -35,7 +34,6 @@
       max-height: 96vh;
     }
 
-    /* ---- Header ---- */
     .header {
       padding: 0.85rem 1rem;
       border-bottom: 1px solid rgba(148, 163, 184, 0.12);
@@ -118,11 +116,9 @@
     }
     .peer-info b { color: #bbf7d0; }
 
-    /* ---- Panels ---- */
     .panel { display: none; flex-direction: column; flex: 1; overflow: hidden; }
     .panel.active { display: flex; }
 
-    /* ---- Game panel ---- */
     .game-panel {
       flex: 1;
       display: flex;
@@ -203,7 +199,6 @@
     .reset-btn:active { transform: translateY(2px); }
     .reset-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    /* Game chat */
     .game-chat-box {
       display: flex;
       flex-direction: column;
@@ -291,7 +286,6 @@
     .game-chat-input-row button:active { transform: scale(0.94); }
     .game-chat-input-row button:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    /* Idle / Start panel */
     .idle-panel {
       flex: 1;
       display: flex;
@@ -348,7 +342,6 @@
     .skip-btn:disabled { opacity: 0.4; cursor: not-allowed; }
     .skip-btn:hover { background: rgba(148, 163, 184, 0.2); }
 
-    /* ---- Status bar ---- */
     .status-bar {
       padding: 0.55rem 1rem;
       background: rgba(15, 23, 42, 0.6);
@@ -371,7 +364,6 @@
     .dot.error      { background: #ef4444; }
     .dot.searching  { background: #3b82f6; animation: pulse 0.7s infinite; }
 
-    /* ---- Overlays ---- */
     .overlay {
       position: fixed;
       inset: 0;
@@ -465,7 +457,6 @@
       border: 1px solid rgba(148, 163, 184, 0.25);
     }
 
-    /* Profile preview */
     .profile-preview {
       width: 80px; height: 80px;
       border-radius: 50%;
@@ -485,7 +476,6 @@
     .profile-preview:hover { transform: scale(1.05); }
     .profile-preview img { width: 100%; height: 100%; object-fit: cover; }
 
-    /* Toast */
     .toast {
       position: fixed;
       bottom: 1.5rem;
@@ -512,6 +502,15 @@
 
     .hidden { display: none !important; }
 
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
     @media (max-width: 500px) {
       .app { max-width: 100%; border-radius: 1.2rem; }
       .header-info { max-width: 100px; }
@@ -522,7 +521,6 @@
 </head>
 <body>
 
-<!-- ---- Profile modal ---- -->
 <div class="overlay" id="profileOverlay">
   <div class="modal-box">
     <h3 id="profileTitle">✨ Set up your profile</h3>
@@ -537,7 +535,6 @@
   </div>
 </div>
 
-<!-- ---- Main app ---- -->
 <div class="app" id="mainApp">
   <div class="header">
     <div class="header-left" id="headerLeft" title="Edit profile">
@@ -552,29 +549,25 @@
     </div>
   </div>
 
-  <!-- ===== SINGLE GAME PANEL ===== -->
   <div class="panel active" id="panel-game">
 
-    <!-- IDLE / START screen -->
     <div class="idle-panel" id="idlePanel">
       <div class="idle-icon">🎮</div>
       <div class="idle-title">X-O Battle</div>
       <div class="idle-desc">
-        Press Start to join the Lobby.<br>
+        Press Start to join the global queue.<br>
         You will connect instantly with the next available player.
       </div>
       <button class="start-btn" id="startBtn">▶ Start</button>
     </div>
 
-    <!-- SEARCHING screen -->
     <div class="idle-panel hidden" id="searchingPanel">
       <div class="idle-icon" style="animation:spin 1.2s linear infinite;">🔄</div>
-      <div class="idle-title">Waiting in Lobby…</div>
-      <div class="idle-desc">Waiting for another player to press Start. Keep this open.</div>
+      <div class="idle-title">Finding opponent…</div>
+      <div class="idle-desc">Searching globally. Keep this open.</div>
       <button class="skip-btn" id="cancelSearchBtn">✕ Cancel</button>
     </div>
 
-    <!-- ACTIVE GAME screen -->
     <div class="game-panel hidden" id="gameActivePanel">
       <div class="game-top">
         <span>You: <b id="mySymbolLabel">?</b></span>
@@ -588,7 +581,6 @@
         <button class="skip-btn" id="skipGameBtn" style="flex:1;padding:0.75rem;font-size:0.88rem;">⏭ Skip</button>
       </div>
 
-      <!-- Game chat box -->
       <div class="game-chat-box">
         <div class="game-chat-messages" id="gameChatMessages">
           <div class="game-chat-msg system">Say hi 👋</div>
@@ -608,7 +600,6 @@
   </div>
 </div>
 
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
@@ -618,7 +609,6 @@
   'use strict';
 
   // DOM
-  const myNumberEl   = document.getElementById('myNumberEl');
   const myNumberText = document.getElementById('myNumberText');
   const myNameEl     = document.getElementById('myName');
   const myAvatarEl   = document.getElementById('myAvatar');
@@ -658,7 +648,6 @@
   // STATE
   let peer = null;
   let dataConn = null;
-  let lobbyConn = null;
   let myNumber = null;
   let peerNumber = null;
   let peerProfile = null;
@@ -678,7 +667,11 @@
   let myScore = 0;
   let peerScore = 0;
 
-  const LOBBY_ID = 'xo-lobby-v1-instant-match';
+  // 使用 PeerBasket 作为匹配服务，房间名固定即可
+  const BASKET_NAME = 'xo-game-global-v1';
+  const BASKET_API  = `https://peerbasket.bittu.dev/basket/${BASKET_NAME}`;
+
+  let pollTimer = null; // 轮询计时器，用于取消搜索
 
   const ICE_SERVERS = [
     { urls: 'stun:stun.l.google.com:19302' },
@@ -815,7 +808,7 @@
 
   const generateNumber = () => String(Math.floor(10000 + Math.random() * 90000));
 
-  // DATA CONNECTION (Between Players)
+  // DATA CONNECTION
   const setupDataConn = (conn, initiator) => {
     if (dataConn && dataConn !== conn) {
       try { dataConn.close(); } catch(e){}
@@ -836,12 +829,7 @@
     conn.on('open', () => {
       isConnected = true;
       isSearching = false;
-      
-      // Leave the lobby since we found a match
-      if (lobbyConn && lobbyConn.open) {
-        try { lobbyConn.close(); } catch(e){}
-        lobbyConn = null;
-      }
+      stopPolling();
 
       setStatus('🟢 In game', 'connected');
       peerInfo.classList.add('visible');
@@ -943,63 +931,72 @@
   };
 
   // ================================================================
-  // LOBBY MATCHMAKING (The Fix)
+  // 匹配逻辑（PeerBasket 版）
   // ================================================================
-  
-  const startSearching = () => {
-    if (isSearching) return;
-    if (isConnected) return;
+
+  const stopPolling = () => {
+    if (pollTimer) {
+      clearInterval(pollTimer);
+      pollTimer = null;
+    }
+  };
+
+  // 向 PeerBasket 注册自己并获取其他 peer 列表
+  const registerAndFetchPeers = async () => {
+    const res = await fetch(BASKET_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ peer_id: myNumber })
+    });
+    if (!res.ok) throw new Error('Basket API error: ' + res.status);
+    const data = await res.json();
+    // peers 数组包含所有活跃 peer ID（包括自己）
+    return (data.peers || []).filter(id => id !== myNumber);
+  };
+
+  const startSearching = async () => {
+    if (isSearching || isConnected) return;
+    if (!peer || !myNumber) {
+      showToast('Still connecting to server, please wait…');
+      return;
+    }
+
     isSearching = true;
-    setStatus('🔍 Waiting in Lobby…', 'searching');
+    setStatus('🔍 Searching globally…', 'searching');
     showSearchingScreen();
 
-    // Connect to the central lobby
-    lobbyConn = peer.connect(LOBBY_ID, { reliable: true });
+    // 立即尝试一次
+    const tryMatch = async () => {
+      if (!isSearching || isConnected) return;
+      try {
+        const opponents = await registerAndFetchPeers();
+        if (opponents.length > 0) {
+          // 找到对手，直接连接
+          stopPolling();
+          const targetId = opponents[0];
+          peerNumber = targetId;
+          iAmInitiator = true;
 
-    lobbyConn.on('open', () => {
-      // Tell the lobby we are ready to play
-      lobbyConn.send(JSON.stringify({
-        type: 'join-lobby',
-        peerId: peer.id,
-        name: myProfile.name
-      }));
-    });
-
-    lobbyConn.on('data', (raw) => {
-      let msg;
-      try { msg = JSON.parse(raw); } catch (e) { return; }
-
-      if (msg.type === 'matched') {
-        // The lobby found us a match! Connect directly to the opponent.
-        isSearching = false;
-        peerNumber = msg.opponentId.replace('xo-', '');
-        iAmInitiator = true; // We connect, so we are X
-        
-        // Close lobby connection, we don't need it anymore
-        try { lobbyConn.close(); } catch(e){}
-        lobbyConn = null;
-
-        // Setup direct game connection
-        const conn = peer.connect(msg.opponentId, { reliable: true });
-        setupDataConn(conn, true);
+          const conn = peer.connect(targetId, { reliable: true });
+          setupDataConn(conn, true);
+        }
+      } catch (e) {
+        console.warn('Matchmaking attempt failed:', e);
       }
-    });
+    };
 
-    lobbyConn.on('error', () => {
-      if (isSearching) {
-        showToast('Lobby error. Retrying...');
-        setTimeout(startSearching, 2000);
-      }
-    });
+    // 第一次立刻尝试
+    await tryMatch();
+
+    // 如果第一次没匹配上（tryMatch 内部没连接成功），启动轮询
+    if (isSearching && !isConnected) {
+      pollTimer = setInterval(tryMatch, 1800); // 每 1.8 秒轮询一次
+    }
   };
 
   const cancelSearch = () => {
     isSearching = false;
-    if (lobbyConn && lobbyConn.open) {
-      try { lobbyConn.send(JSON.stringify({ type: 'leave-lobby', peerId: peer.id })); } catch(e){}
-      try { lobbyConn.close(); } catch(e){}
-      lobbyConn = null;
-    }
+    stopPolling();
     showIdleScreen();
     setStatus('Idle', '');
   };
@@ -1143,8 +1140,11 @@
     isConnected = false;
     peerInfo.classList.remove('visible');
 
+    // 直接重新开始搜索
     showSearchingScreen();
-    setTimeout(startSearching, 300);
+    setStatus('🔍 Searching globally…', 'searching');
+    isSearching = false;
+    startSearching();
   };
 
   // BUTTONS
@@ -1158,65 +1158,8 @@
   skipGameBtn.addEventListener('click', skipPlayer);
 
   // ================================================================
-  // AUTOMATED LOBBY SERVER (Runs silently in the background)
-  // ================================================================
-  // One of the connected players will act as the "Lobby Master".
-  // This happens automatically without the users knowing.
-  
-  const startLobbyMaster = () => {
-    const lobbyPeer = new Peer(LOBBY_ID, { debug: 0 });
-    let waitingPlayer = null;
-
-    lobbyPeer.on('open', () => {
-      console.log('👑 Lobby Master active');
-    });
-
-    lobbyPeer.on('connection', (conn) => {
-      conn.on('data', (raw) => {
-        let msg;
-        try { msg = JSON.parse(raw); } catch (e) { return; }
-
-        if (msg.type === 'join-lobby') {
-          if (!waitingPlayer) {
-            // First player joins, hold them in queue
-            waitingPlayer = { peerId: msg.peerId, conn };
-            // Optional: send ack
-          } else {
-            // Second player joins, pair them instantly!
-            const p1 = waitingPlayer;
-            const p2 = { peerId: msg.peerId, conn };
-            
-            // Tell Player 1 to connect to Player 2
-            try { p1.conn.send(JSON.stringify({ type: 'matched', opponentId: p2.peerId })); } catch(e){}
-            // Tell Player 2 to connect to Player 1
-            try { p2.conn.send(JSON.stringify({ type: 'matched', opponentId: p1.peerId })); } catch(e){}
-            
-            waitingPlayer = null; // Clear queue
-          }
-        } 
-        else if (msg.type === 'leave-lobby') {
-          if (waitingPlayer && waitingPlayer.peerId === msg.peerId) {
-            waitingPlayer = null;
-          }
-        }
-      });
-
-      conn.on('close', () => {
-        if (waitingPlayer && waitingPlayer.conn === conn) {
-          waitingPlayer = null;
-        }
-      });
-    });
-
-    lobbyPeer.on('error', (err) => {
-      if (err.type === 'unavailable-id') {
-        // Someone else is already the master. That's perfect. We don't need to be the master.
-        try { lobbyPeer.destroy(); } catch(e){}
-      }
-    });
-  };
-
   // INIT
+  // ================================================================
   const init = async () => {
     let saved = localStorage.getItem('xo_my_number');
     let num;
@@ -1234,9 +1177,7 @@
       openProfileModal(true);
     }
 
-    // Boot up the Peer and the silent Lobby server
     initPeer('xo-' + num);
-    startLobbyMaster(); 
 
     showIdleScreen();
     setStatus('Connecting…', 'connecting');
@@ -1249,9 +1190,7 @@
     }, 500);
 
     window.addEventListener('beforeunload', () => {
-      if (lobbyConn && lobbyConn.open) {
-        try { lobbyConn.send(JSON.stringify({ type: 'leave-lobby', peerId: peer.id })); } catch(e){}
-      }
+      stopPolling();
       if (dataConn && dataConn.open) {
         try { dataConn.send(JSON.stringify({ type: 'bye' })); } catch(e){}
       }
